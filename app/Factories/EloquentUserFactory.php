@@ -7,12 +7,23 @@ namespace App\Factories;
 
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 
 class EloquentUserFactory implements UserFactoryInterface
 {
-    private const MOCK_PASSWORD = 'test';
+    private const PASSWORD_LENGTH = 12;
+
+    /**
+     * @param Model $user
+     *
+     * @throws \Throwable
+     */
+    public function __construct(private Model $user)
+    {
+    }
 
     /**
      * @param SocialiteUser $socialiteUser
@@ -21,8 +32,7 @@ class EloquentUserFactory implements UserFactoryInterface
      */
     public function make(SocialiteUser $socialiteUser): Authenticatable
     {
-        /** @var \Illuminate\Foundation\Auth\User $user */
-        $user = $this->getUserClass()::findOrNew($socialiteUser->getId());
+        $user = $this->user->findOrNew($socialiteUser->getId());
 
         $user->id       = $socialiteUser->getId();
         $user->name     = $socialiteUser->getName();
@@ -31,7 +41,7 @@ class EloquentUserFactory implements UserFactoryInterface
         $user->nickname = $socialiteUser->getNickname();
 
         if (! $user->exists) {
-            $user->password = Hash::make(static::MOCK_PASSWORD);
+            $user->password = Hash::make(Str::random(self::PASSWORD_LENGTH));
         }
 
         if ($user->isDirty()) {
@@ -39,10 +49,5 @@ class EloquentUserFactory implements UserFactoryInterface
         }
 
         return $user;
-    }
-
-    private function getUserClass(): string
-    {
-        return config('auth.providers.users.model');
     }
 }

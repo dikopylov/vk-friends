@@ -43,7 +43,10 @@ class AppServiceProvider extends ServiceProvider
     private function bindings(): void
     {
         if ($this->isEloquentUser()) {
-            $this->app->bind(UserFactoryInterface::class, EloquentUserFactory::class);
+            $this->app->bind(
+                UserFactoryInterface::class,
+                static fn() => new EloquentUserFactory(config('auth.providers.users.model'))
+            );
         }
 
         $this->app->bind(FriendsClient::class, VKClient::class);
