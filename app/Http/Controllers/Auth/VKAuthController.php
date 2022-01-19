@@ -24,7 +24,7 @@ class VKAuthController extends Controller
 
     public function verify()
     {
-        $user = $this->authService->auth(Socialite::driver(self::DRIVER)->user());
+        $user = $this->authService->login(Socialite::driver(self::DRIVER)->user());
 
         if ($user) {
             return redirect()->to('/');

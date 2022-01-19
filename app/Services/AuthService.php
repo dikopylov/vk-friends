@@ -10,7 +10,6 @@ use App\Factories\UserFactoryInterface;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Socialite\Two\User as SocialiteUser;
 
 class AuthService
@@ -20,7 +19,7 @@ class AuthService
     {
     }
 
-    public function auth(SocialiteUser $socialiteUser): ?Authenticatable
+    public function login(SocialiteUser $socialiteUser): Authenticatable
     {
         $user = $this->userFactory->make($socialiteUser);
 
