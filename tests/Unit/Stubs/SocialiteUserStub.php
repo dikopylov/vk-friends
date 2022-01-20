@@ -8,10 +8,12 @@ class SocialiteUserStub implements User
 {
     public function __construct(
         private string|int $id,
-        private string     $nickname,
-        private string     $name,
-        private string     $email,
-        private string     $avatar,
+        private string $nickname,
+        private string $name,
+        private string $email,
+        private string $avatar,
+        public ?string $token = null,
+        public ?int $expiresIn = null,
     ) {
     }
 
