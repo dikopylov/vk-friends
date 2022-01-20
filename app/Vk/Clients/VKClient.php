@@ -23,32 +23,32 @@ class VKClient implements FriendsClient
     {
     }
 
-    public function getFriends(FriendsRequest $friendsRequestParameters): FriendsResponse
+    public function getFriends(FriendsRequest $friendsRequest): FriendsResponse
     {
-        $rawFriends = $this->parser->parseUsers($this->getRawFriends($friendsRequestParameters));
+        $rawFriends = $this->parser->parseUsers($this->getRawFriends($friendsRequest));
 
         $targetIDs  = collect($rawFriends[ResponseOptions::ITEMS])
-            ->pluck('id')
+            ->pluck(ResponseOptions::ID)
             ->toArray();
 
-        $mutualFriendsRequest = new MutualFriendsRequest($friendsRequestParameters->getAccessToken());
-        $mutualFriendsRequest->setSourceUID($friendsRequestParameters->getUserId());
+        $mutualFriendsRequest = new MutualFriendsRequest($friendsRequest->getAccessToken());
+        $mutualFriendsRequest->setSourceUID($friendsRequest->getUserId());
         $mutualFriendsRequest->setTargetUIDs($targetIDs);
 
         $rawMutualFriends = $this->getRawMutualFriendIDs($mutualFriendsRequest);
 
-        return new FriendsResponse($rawFriends, $rawMutualFriends, $friendsRequestParameters->getCount());
+        return new FriendsResponse($rawFriends, $rawMutualFriends, $friendsRequest->getCount());
     }
 
     public function getMutualFriendIDs(MutualFriendsRequest $mutualFriendsRequest): MutualFriendsResponse {
         return new MutualFriendsResponse($this->getRawMutualFriendIDs($mutualFriendsRequest));
     }
 
-    public function getRawFriends(FriendsRequest $friendsRequestParameters): array
+    public function getRawFriends(FriendsRequest $friendsRequest): array
     {
         return $this->client->friends()->get(
-            $friendsRequestParameters->getAccessToken(),
-            $friendsRequestParameters->toArray() + ['order' => 'name']
+            $friendsRequest->getAccessToken(),
+            $friendsRequest->toArray()
         );
     }
 

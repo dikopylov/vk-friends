@@ -11,11 +11,11 @@ use App\Vk\Response\UserResponse;
 
 interface FriendsClient
 {
-    public function getFriends(FriendsRequest $friendsRequestParameters): FriendsResponse;
+    public function getFriends(FriendsRequest $friendsRequest): FriendsResponse;
 
     public function getMutualFriendIDs(MutualFriendsRequest $mutualFriendsRequest): MutualFriendsResponse;
 
-    public function getRawFriends(FriendsRequest $friendsRequestParameters): array;
+    public function getRawFriends(FriendsRequest $friendsRequest): array;
 
     public function getRawMutualFriendIDs(MutualFriendsRequest $mutualFriendsRequest): array;
 

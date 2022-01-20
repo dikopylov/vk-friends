@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 
 final class TagRepository
@@ -16,5 +17,10 @@ final class TagRepository
     public function detachFromFriend(int $tagId, int $friendId): int
     {
         return DB::table(self::TABLE)->where(['user_id' => $friendId, 'tag_id' => $tagId])->delete();
+    }
+
+    public function create(string $title): Tag
+    {
+        return Tag::create(['title' => $title]);
     }
 }

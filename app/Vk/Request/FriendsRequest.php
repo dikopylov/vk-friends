@@ -2,13 +2,12 @@
 
 namespace App\Vk\Request;
 
-use App\Vk\Request\RequestOptions;
-
 class FriendsRequest extends AbstractFriendsRequest
 {
     private ?int    $userId = null;
     private ?int    $page   = null;
     private ?string $fields = null;
+    private string  $order  = 'name';
 
     /**
      * @param int $userId
@@ -69,6 +68,14 @@ class FriendsRequest extends AbstractFriendsRequest
         return $this->userId;
     }
 
+    /**
+     * @param string $order
+     */
+    public function setOrder(string $order): void
+    {
+        $this->order = $order;
+    }
+
     public function toArray(): array
     {
         $result = [];
@@ -83,6 +90,10 @@ class FriendsRequest extends AbstractFriendsRequest
 
         if ($this->offset) {
             $result[RequestOptions::OFFSET] = $this->offset;
+        }
+
+        if ($this->order) {
+            $result[RequestOptions::ORDER] = $this->order;
         }
 
 

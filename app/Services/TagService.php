@@ -17,7 +17,7 @@ class TagService
 
     public function createTag(string $title): Tag
     {
-        return Tag::create(['title' => $title]);
+        return $this->repository->create($title);
     }
 
     public function attachTagToFriend(int $tagId, int $friendId): int
